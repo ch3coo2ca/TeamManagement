@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName">
+			<value>oracle.jdbc.driver.OracleDriver</value>
+		</property>
+		<property name="url">
+			<value>jdbc:oracle:thin:@127.0.0.1:1521:xe</value>
+		</property>
+		<property name="username" value="javajava" />
+		<property name="password" value="javajava" />
+	</bean>
+
+	<bean id="memberDAO" class="dao.impl.MemberDAOImpl">
+		<constructor-arg>
+			<ref bean="dataSource" />
+		</constructor-arg>
+	</bean>
+	<bean id="teamDAO" class="dao.impl.TeamDAOImpl">
+		<constructor-arg>
+			<ref bean="dataSource" />
+		</constructor-arg>
+	</bean>
+	<bean id="selectTeamView" class="view.SelectTeamView">
+		<property name="teamDAO" ref="teamDAO" />
+	</bean>
+	<bean id="mainView" class="view.MainView">
+		<property name="selectTeamView" ref="selectTeamView" />
+		<property name="insertMemberView" ref="insertMemberView" />
+		<property name="selectMemberView" ref="selectMemberView" />
+
+	</bean>
+	<bean id="insertMemberView" class="view.InsertMemberView">
+		<property name="teamDAO" ref="teamDAO" />
+		<property name="memberDAO" ref="memberDAO" />
+	</bean>
+
+	<bean id="selectMemberView" class="view.SelectMemberView">
+		<property name="memberDAO" ref="memberDAO" />
+		<property name="updateMemberView" ref="updateMemberView" />
+		<property name="deleteMemberView" ref="deleteMemberView" />
+	</bean>
+
+	<bean id="deleteMemberView" class="view.DeleteMemberView">
+		<property name="memberDAO" ref="memberDAO" />
+	</bean>
+
+	<bean id="updateMemberView" class="view.UpdateMemberView">
+		<property name="memberDAO" ref="memberDAO" />
+	</bean>
+
+
+</beans>
